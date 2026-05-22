@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}Player Profile{% endblock %}
+
+{% block content %}
+    <div class="container d-flex flex-column align-items-center mx-auto" style="width: 100%; padding-top: 1.5rem;">
+        <h1 class=" d-flex flex-column" style="font-family: Nunito, sans-serif; font-size: 50px; color: #6366f1; margin-top: 20px;">Player Profile</h1>
+        <div class="d-flex align-items-stretch justify-content-center gap-0 mx-auto" style="width: fit-content;">
+            <div class="info-div info-div-col div-fade-right" style="width: 170px; height: 200px; background-size: cover; background-position: center; border: none; margin-left: -24px; flex-shrink: 0; position: relative; z-index: 1; white-space: nowrap; overflow: hidden;">
+                <div class="container-fluid txtd" style="padding-top: 0.3rem;"><strong>{{session.get('idtag')}} </strong></div>
+                <div class="container-fluid txtd" style="">Level: {{player.get('account_level', 'Unknown')}}</div> 
+                <div class="container-fluid txtd" style="">Region: {{player.get('region', 'Unknown')}}</div>
+                <div class="container-fluid txtd" style="margin-top: 0.2rem; font-size: 13px; line-height: 1.1;">Rank: {{ player.get('rankName') or 'Unranked' }}</div>
+                <div class="container-fluid txtd" style="display: flex; justify-content: center; align-items: center; height: 72px; margin-top: 0.15rem; overflow: hidden;">
+                    {% if player.get('rankImg') %}
+                        <img src="{{ player.get('rankImg') }}" alt="" style="max-width: 64px; max-height: 64px; object-fit: contain; display: block;">
+                    {% else %}
+                        <span style="font-size: 14px; color: #e5e7eb;">Unranked</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="info-div info-div-row" style="background-image: url('{{ player.get('card', '').wide }}'); width: 500px; height: 200px; background-size: cover; flex-shrink: 0;">
+            </div>
+        </div>
+    </div>
+
+    <div class="container d-flex flex-column align-items-center mx-auto" style="width: 100%; padding-top: 1.5rem;">
+        <h2 class=" d-flex flex-column" style="font-family: Nunito, sans-serif; font-size: 30px; color: #6366f1; margin-top: 20px;">Recent Matches</h2>
+        <div class="d-flex flex-wrap justify-content-center gap-3 mx-auto" style="width: fit-content;">
+            {%if matches %}
+                {% for match in matches %}
+
+                <div class="match-card" style="width: 300px; height: 150px; background-color: {% if match.result == 'Win' %}rgba(34, 197, 94, 0.16){% elif match.result == 'Loss' %}rgba(239, 68, 68, 0.16){% else %}rgba(31, 41, 55, 0.9){% endif %}; border: 1px solid {% if match.result == 'Win' %}rgba(74, 222, 128, 0.45){% elif match.result == 'Loss' %}rgba(248, 113, 113, 0.45){% else %}rgba(255, 255, 255, 0.08){% endif %}; border-radius: 8px; padding: 10px; color: #e5e7eb; backdrop-filter: blur(10px); overflow: hidden; white-space: nowrap;">
+                    <div class="match-info">
+                        <div><strong>Map:</strong> {{ match.map }}</div>
+                        <div><strong>Mode:</strong> {{ match.mode }}</div>
+                        <div><strong>Agent:</strong> {{ match.agent }}</div>
+                        <div><strong>Result:</strong> {{ match.result }}</div>
+                        <div><strong>K/D/A:</strong> {{ match.kda }}</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Date:</strong> {{ match.game_start_patched }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% else %}
+                <p style="color: #e5e7eb;">No recent matches found.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

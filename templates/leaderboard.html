@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Leaderboard
+{% endblock %}
+
+{% block content %}
+<div class="mx-auto mt-4" style="width: 200px; justify-content: center; display: flex;">
+    <h2 class="mb-2" style="color: #6366f1; min-height: 40px;"><strong id="logo"></strong></h2>
+</div>
+    
+    <div class="justify-content-center d-flex flex-column align-items-center">
+        <h1 style="font-family: Arial, sans-serif; font-size: 50px; color: #6366f1; margin-top: 20px;">Leaderboard</h1>
+        
+        <form action="/leaderboard" method="get" class="d-flex flex-column align-items-center w-100">
+            <div class="form-group mb-3">
+                <button type="submit" name="region" value="eu" class="btn btn-outline-primary mt-2" style="background-color: #6366f1; color: #ffffff; border-color: #6366f1;">EU</button>
+                <button type="submit" name="region" value="na" class="btn btn-outline-primary mt-2" style="background-color: #6366f1; color: #ffffff; border-color: #6366f1;">NA</button>
+                <button type="submit" name="region" value="ap" class="btn btn-outline-primary mt-2" style="background-color: #6366f1; color: #ffffff; border-color: #6366f1;">AP</button>
+            </div>
+        </form>
+    </div>
+    <div class="justify-content-center d-flex flex-column align-items-center leaderboard-container mx-auto">
+        <h1 class="mt-4" style="color: #6366f1;">Top 10 Players</h1>
+    <table class="table table-dark table-striped mt-2 track-table">
+        <thead class="track-table">
+            <tr>
+                <th scope="col">Place</th>
+                <th scope="col">Player Name</th>
+                <th scope="col" style="margin-right: 5px;">Wins</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Tier</th>
+            </tr>
+        </thead>
+        <tbody class="track-table">
+            {% for player in players %}
+            <tr class="player-card-row">
+                <td colspan="5">
+                    <img style="border: 2px solid #6366f1;" class="player-card-preview" src="{{ player.cardImage }}" alt="Player card for {{ player.name }} {{ player.tag }}">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row" class="pt-3">{{ loop.index }}</th>
+                <td class="pt-3">
+            {% set display_name = player.gameName if player.gameName else 'Unknown' %}
+            {% set display_tag = player.tag if player.tag else '----' %}
+            {% if player.gameName and player.tag %}
+            <a  class="link-button" href="/player?idtag={{ player.gameName }}%23{{ player.tag }}" style="color: #6366f1;
+            font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: none;">{{ display_name }}#{{ display_tag }}</a>
+            {% else %}
+            <span style="color: #6366f1; font-weight: bold;">{{ display_name }}#{{ display_tag }}</span>
+            {% endif %}</td>
+                <td class="pt-3">{{ player.wins }}</td>
+                <td class="pt-3">{{ player.rankedRating }}</td>
+            <td class="pb-1"><span class="rank-badge"><span class="rank-name">{{ player.rankName }}</span><img class="rank-icon" src="{{ player.rankImg }}" alt="{{ player.tierName }}"></span></td>
+            </tr>
+            
+            
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+{% endblock %}
