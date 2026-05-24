@@ -108,14 +108,6 @@ Trackdot/
 
 ---
 
-## Known Limitations
-
-- Not deployed yet (runs locally)
-- Rank info for players not on the leaderboard relies on match data as a fallback
-- API key is hardcoded (should move to `.env`)
-
----
-
 ## Built By
 
 Fahad — CS50 Final Project  
